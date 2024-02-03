@@ -109,21 +109,30 @@ void mostPopularInGenre(magazin filmsArr[], int indexToInsert)
 		break;
 	}
 
+	bool foundFilm = false;
+
+
 	for (int i = 0; i < indexToInsert; i++)
 	{
 		if (filmsArr[i].Genre == Genre && filmsArr[i].rating > rating)
 		{
 			ans = i;
 			rating = filmsArr[i].rating;
+			foundFilm = true;
 		}
 	}
 	
-	cout << "The most popular in genre " << strGenre << ":\n";
+	if (foundFilm)
+	{
+		cout << "The most popular in genre " << strGenre << ":\n";
 		printFile(filmsArr, ans);
+	}
+	else
+		cout << "No such films" << endl;
 }
 
 
-void searchWithGenre(magazin filmsArr[], int indexToInsert)
+void searchByGenre(magazin filmsArr[], int indexToInsert)
 {
 	cout << "Enter the genre:\n1 - HORROR\n2 - THRILLER\n3 - MELODRAMA\n4 - PHILOSOPHY" << endl;
 	genre Genre;
@@ -163,14 +172,6 @@ void searchWithGenre(magazin filmsArr[], int indexToInsert)
 	}
 }
 
-
-void searchWithDirector(magazin filmsArr[], int indexToInsert)
-{
-	cout << "Enter the director";
-}
-
-
-
 bool proverka(int value, string str, string pdstr)
 {
 	for (int i = 0; i < pdstr.size(); i++)
@@ -182,27 +183,33 @@ bool proverka(int value, string str, string pdstr)
 	return true;
 }
 
-//bool proverka(int value, string str, string pdstr)
-//{
-//	for (int i = 0; i < pdstr.size(); i++)
-//	{
-//		if (value >= str.size() || pdstr[i] != str[value])
-//		{
-//			return false;
-//		}
-//		value++;
-//	}
-//	return true;
-//}
+void searchByDirector(magazin filmsArr[], int indexToInsert)
+{
+	cout << "Enter the director: " << endl;
+	string dir;
+	cin >> dir;
+	cout << "Results of searching by director \"" << dir << "\": " << endl;
+	for (int i = 0; i < indexToInsert; i++)
+	{
+		for (int j = 0; j < filmsArr[i].director.size(); j++)
+		{
+			if (filmsArr[i].director[j] == dir[0])
+				if (proverka(j, filmsArr[i].director, dir))
+				{
+					printFile(filmsArr, i);
+					break;
+				}
+		}
+	}
+}
 
-
-void searchWithName(magazin filmsArr[], int indexToInsert)
+void searchByName(magazin filmsArr[], int indexToInsert)
 {
 	cout << "Enter the name: " << endl;
 	string podStroka;
 	cin >> podStroka;
 	cout << "Results of searching by name \"" << podStroka << "\": " << endl;
-	for (int i = 0; i < sizeArr; i++)
+	for (int i = 0; i < indexToInsert; i++)
 	{
 		for (int j = 0; j < filmsArr[i].name.size(); j++)
 		{
@@ -211,10 +218,10 @@ void searchWithName(magazin filmsArr[], int indexToInsert)
 				if (proverka(j, filmsArr[i].name, podStroka))
 				{
 					printFile(filmsArr, i);
+					break;
 				}
-				else
-					continue;
-				
+					
+			
 			}
 		}
 	}
@@ -236,14 +243,15 @@ int main()
 
 	while (TurnOn)
 	{
-		cout << "1 - Add a new film\n2 - Show entire library\n3 - Quit\n4 - The most popular film in genre\n5 - Search with genre"
-			<< "\n6 - Search by name" << endl;
+		cout << "1 - Add a new film\n2 - Show the entire library\n3 - Quit\n4 - The most popular film in genre\n5 - Search with genre"
+			<< "\n6 - Search by name\n7 - Search by director" << endl;
 		cin >> choice;
 		cin.ignore();
 		switch (choice)
 		{
 		case 1:
 		{
+			system("cls");
 			magazin newFile = addingFile();
 			filmsArr[indexToInsert] = newFile;
 			printFile(filmsArr, indexToInsert);
@@ -252,6 +260,7 @@ int main()
 		}
 			
 		case 2:
+			system("cls");
 			cout << "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\nLIBRARY\n";
 			for (int i = 0; i < indexToInsert; i++)
 			{
@@ -260,21 +269,36 @@ int main()
 			cout << "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n";
 			break;
 		case 3:
+			system("cls");
 			TurnOn = false;
 			break;
 		case 4:
+			system("cls");
+			if (indexToInsert == 0)
+			{
+				cout << "No films in library..." << endl;
+				break;
+			}
 			cout << "The most popular film in genre";
 			mostPopularInGenre(filmsArr, indexToInsert);
 			break;
 
 		case 5:
-			cout << "Search with genre";
-			searchWithGenre(filmsArr, indexToInsert);
+			system("cls");
+			cout << "Search by genre";
+			searchByGenre(filmsArr, indexToInsert);
 			break;
 
 		case 6:
+			system("cls");
 			cout << "Search by name";
-			searchWithName(filmsArr, indexToInsert);
+			searchByName(filmsArr, indexToInsert);
+			break;
+
+		case 7:
+			system("cls");
+			cout << "Search by name";
+			searchByDirector(filmsArr, indexToInsert);
 			break;
 
 		default:
